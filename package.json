@@ -1,0 +1,29 @@
+{
+  "name": "nuxtui-portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "nuxt": "^4.0.0",
+    "@nuxt/ui": "^3.0.0",
+    "@pinia/nuxt": "^0.10.0",
+    "@vueuse/nuxt": "^12.0.0",
+    "@nuxt/image": "^1.10.0",
+    "@nuxt/icon": "^1.8.0",
+    "@nuxt/scripts": "^0.8.0",
+    "@sidebase/nuxt-auth": "^1.0.0",
+    "nuxt-security": "^2.0.0",
+    "@nuxtjs/seo": "^2.0.0",
+    "@nuxt/hints": "^1.0.0",
+    "pinia": "^3.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "vue-tsc": "^2.2.0",
+    "@types/node": "^22.10.0"
+  }
+}
