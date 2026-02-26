@@ -42,16 +42,24 @@ export default defineNuxtConfig({
   },
 
   // Módulos principais do projeto
-  modules: [// UI + DX
+  modules: [// UI
+  //  + DX
+  '@nuxt/fonts',
   '@nuxt/ui', '@pinia/nuxt', '@vueuse/nuxt', // Assets
   '@nuxt/image', '@nuxt/icon', '@nuxt/scripts', // Auth + Segurança
-  '@sidebase/nuxt-auth', 'nuxt-security', // SEO (inclui sitemap/robots/og-image por dependência)
+   // '@sidebase/nuxt-auth', // (Fase 2: login, vamos reativar)
+  'nuxt-security', // SEO (inclui sitemap/robots/og-image por dependência)
   '@nuxtjs/seo', // Hints (performance/a11y/boas práticas no devtools)
 // '@nuxt/hints'
    '@nuxt/eslint'],
 
   // CSS global (Tailwind + Nuxt UI)
   css: ['~/assets/css/main.css'],
+ui: {
+  theme: {
+    colors: ['primary', 'secondary', 'tertiary', 'success', 'info', 'warning', 'error', 'neutral']
+  }
+},
 
   
 
