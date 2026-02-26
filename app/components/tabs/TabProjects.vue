@@ -31,14 +31,16 @@ function openProject(item: Project) {
     />
 
     <div v-else>
+      <!-- Desktop: Scroll Area (altura válida) -->
       <div class="hidden lg:block">
-        <UScrollArea class="h-130 pr-2">
+        <UScrollArea class="h-[520px] pr-2">
           <div class="grid grid-cols-2 xl:grid-cols-3 gap-3">
             <ProjectCard v-for="p in projects" :key="p.id" :item="p" @open="openProject" />
           </div>
         </UScrollArea>
       </div>
 
+      <!-- Mobile: rolagem normal da página -->
       <div class="lg:hidden">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <ProjectCard v-for="p in projects" :key="p.id" :item="p" @open="openProject" />

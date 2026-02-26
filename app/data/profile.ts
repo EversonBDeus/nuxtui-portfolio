@@ -16,6 +16,11 @@ export const profile = {
   headline: 'Desenvolvedor Web',
   avatarSrc: '/img/profile/avatar.jpeg',
 
+  cv: {
+    url: '/files/cv.pdf',
+    openInNewTab: true
+  },
+
   socials: [
     { label: 'LinkedIn', icon: 'i-lucide-linkedin', url: '', brandClass: 'brand-linkedin' },
     { label: 'GitHub', icon: 'i-lucide-github', url: '', brandClass: 'brand-github' },
@@ -27,6 +32,7 @@ export const profile = {
     telegramUrl: ''
   },
 
+  // ✅ voltou (era isso que alimentava o Accordion do "Sobre mim")
   about: [
     {
       label: 'Sobre mim',

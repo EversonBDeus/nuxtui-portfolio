@@ -12,7 +12,7 @@ const items = [
 
 <template>
   <div class="mt-6">
-    <UTabs
+    <UTabs v-reveal
       :items="items"
       class="w-full"
       :ui="{

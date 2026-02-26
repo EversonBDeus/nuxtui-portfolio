@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Certificate } from '~/data/certificates'
+import { formatYm, toPublicPath } from '~/utils/format'
 
 const props = defineProps<{
   modelValue: boolean
@@ -15,21 +16,38 @@ const open = computed({
   set: (v) => emit('update:modelValue', v)
 })
 
+const imgSrc = computed(() => (props.item ? toPublicPath(props.item.image) : ''))
+
 const timelineItems = computed(() => {
   if (!props.item) return []
   return [
-    { title: 'Início', date: props.item.startDate, icon: 'i-lucide-play' },
-    { title: 'Conclusão', date: props.item.endDate, icon: 'i-lucide-check-circle' }
+    { title: 'Início', date: formatYm(props.item.startDate), icon: 'i-lucide-play' },
+    { title: 'Conclusão', date: formatYm(props.item.endDate), icon: 'i-lucide-check-circle' }
   ]
 })
 
 const toast = useToast()
-function linkToast() {
+
+function toastOpen(label: string) {
   toast.add({
-    title: 'Abrindo certificado',
-    description: 'O link será aberto em uma nova guia.',
+    title: label,
+    description: 'Abrindo em uma nova guia.',
     icon: 'i-lucide-external-link'
   })
+}
+
+function toastDownload() {
+  toast.add({
+    title: 'Download',
+    description: 'Abrindo o arquivo para baixar.',
+    icon: 'i-lucide-download'
+  })
+}
+
+function openImage() {
+  if (!imgSrc.value) return
+  toastOpen('Imagem do certificado')
+  window.open(imgSrc.value, '_blank', 'noopener,noreferrer')
 }
 </script>
 
@@ -41,13 +59,13 @@ function linkToast() {
     :title="item?.title || 'Certificado'"
     :description="item?.provider"
   >
-    <!-- IMPORTANTE: conteúdo do painel vai no #body -->
     <template #body>
       <div class="space-y-5">
-        <p v-if="item?.description" class="text-sm text-gray-600 dark:text-gray-300">
+        <p v-if="item?.description" class="text-sm text-muted">
           {{ item.description }}
         </p>
 
+        <!-- Ações -->
         <div class="flex gap-3 flex-wrap">
           <UButton
             v-if="item?.viewUrl"
@@ -55,7 +73,7 @@ function linkToast() {
             variant="soft"
             :to="item.viewUrl"
             target="_blank"
-            @click="linkToast"
+            @click="toastOpen('Visualizar certificado')"
           >
             Visualizar
           </UButton>
@@ -63,19 +81,30 @@ function linkToast() {
           <UButton
             v-if="item?.downloadUrl"
             icon="i-lucide-download"
+            variant="soft"
             :to="item.downloadUrl"
             target="_blank"
-            @click="linkToast"
+            @click="toastDownload"
           >
             Baixar
           </UButton>
+
+          <UButton
+            icon="i-lucide-image"
+            variant="soft"
+            color="neutral"
+            @click="openImage"
+          >
+            Abrir imagem
+          </UButton>
         </div>
 
+        <!-- Imagem -->
         <UCard :ui="{ body: 'p-3' }">
-          <div class="rounded-lg overflow-hidden border border-default">
+          <div class="rounded-lg overflow-hidden border border-default bg-muted">
             <img
               v-if="item"
-              :src="item.image"
+              :src="imgSrc"
               :alt="item.title"
               class="w-full object-cover"
             />
@@ -83,6 +112,7 @@ function linkToast() {
           </div>
         </UCard>
 
+        <!-- Timeline -->
         <div class="space-y-2">
           <h4 class="font-semibold">Linha do tempo</h4>
           <UTimeline :items="timelineItems" />

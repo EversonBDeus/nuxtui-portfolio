@@ -1,10 +1,22 @@
+<script setup lang="ts">
+const siteName = 'Everson Deus • Portfólio'
+
+useSeoMeta({
+  titleTemplate: (titleChunk) => (titleChunk ? `${titleChunk} · ${siteName}` : siteName),
+  description: 'Portfólio de Everson Deus. Projetos, habilidades e certificados.',
+  ogTitle: siteName,
+  ogDescription: 'Projetos, habilidades e certificados.',
+  ogType: 'website',
+  ogImage: '/og.png',
+  twitterCard: 'summary_large_image',
+  twitterImage: '/og.png'
+})
+</script>
+
 <template>
   <UApp>
-    <!-- bg-theme = gradiente guiado pelo tema -->
-    <div class="app-bg bg-theme">
-      <!-- bg-fx = camada só de efeitos (não interfere no bg-theme) -->
-      <div class="bg-fx bg-anim-07" aria-hidden="true" />
+    <NuxtLayout>
       <NuxtPage />
-    </div>
+    </NuxtLayout>
   </UApp>
 </template>

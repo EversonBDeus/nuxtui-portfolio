@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Certificate } from '~/data/certificates'
+import { toPublicPath } from '~/utils/format'
 
 const props = defineProps<{
   item: Certificate
@@ -8,16 +9,18 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'open', item: Certificate): void
 }>()
+
+const imgSrc = computed(() => toPublicPath(props.item.image))
 </script>
 
 <template>
-  <UCard
+  <UCard v-reveal
     class="cursor-pointer hover:shadow-md transition-shadow"
     :ui="{ body: 'p-3 space-y-3' }"
     @click="emit('open', props.item)"
   >
     <div class="rounded-lg overflow-hidden border border-default">
-      <img :src="props.item.image" :alt="props.item.title" class="w-full h-36 object-cover" />
+      <img :src="imgSrc" :alt="props.item.title" class="w-full h-36 object-cover" />
     </div>
 
     <div class="text-left">

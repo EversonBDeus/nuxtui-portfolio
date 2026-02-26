@@ -1204,3 +1204,52 @@ html[data-preset="neon-spectrum"].dark {
   --ui-secondary: var(--ui-color-secondary-600);
   --ui-tertiary: var(--ui-color-tertiary-600);
 }
+
+/* =========================
+   Scroll Reveal (base)
+   ========================= */
+
+.reveal {
+  /* controle via CSS vars (setadas pela diretiva) */
+  --reveal-delay: 0ms;
+  --reveal-duration: 650ms;
+  --reveal-distance: 18px;
+
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-distance), 0);
+  filter: blur(6px);
+  transition:
+    opacity var(--reveal-duration) ease,
+    transform var(--reveal-duration) ease,
+    filter var(--reveal-duration) ease;
+  transition-delay: var(--reveal-delay);
+  will-change: opacity, transform, filter;
+}
+
+/* Direções */
+.reveal--top {
+  transform: translate3d(0, calc(var(--reveal-distance) * -1), 0);
+}
+.reveal--left {
+  transform: translate3d(calc(var(--reveal-distance) * -1), 0, 0);
+}
+.reveal--right {
+  transform: translate3d(var(--reveal-distance), 0, 0);
+}
+
+/* Quando entra na tela */
+.reveal--visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0);
+}
+
+/* Respeita acessibilidade: reduz animações */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}

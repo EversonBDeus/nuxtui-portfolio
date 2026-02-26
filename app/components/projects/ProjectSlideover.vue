@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Project, ProjectRole } from '~/data/projects'
+import { toPublicPath } from '~/utils/format'
 
 const props = defineProps<{
   modelValue: boolean
@@ -24,16 +25,48 @@ const roleLabel: Record<ProjectRole, string> = {
 }
 
 const screenshotsPath = computed(() => (props.item ? `/projects/${props.item.slug}` : '/'))
+const coverSrc = computed(() => (props.item ? toPublicPath(props.item.coverImage) : ''))
 
-const hasLink = (u?: string) => !!u && u.startsWith('http')
+function notifyMissing(label: string, e?: Event) {
+  e?.preventDefault?.()
+  toast.add({
+    title: 'Link não configurado',
+    description: `Adicione o link de ${label} em data/projects.ts`,
+    icon: 'i-lucide-link-2-off'
+  })
+}
 
-function notify(msg: string) {
-  toast.add({ title: 'Ação', description: msg, icon: 'i-lucide-info' })
+function onScreenshotsClick(e: Event) {
+  if (!props.item?.screenshots?.length) {
+    e.preventDefault()
+    toast.add({
+      title: 'Sem screenshots',
+      description: 'Adicione imagens em public/projects/<slug>/ e liste em data/projects.ts.',
+      icon: 'i-lucide-images'
+    })
+    return
+  }
+
+  // deixa a navegação do :to acontecer, mas fecha o slideover + toast
+  open.value = false
+  toast.add({
+    title: 'Screenshots',
+    description: 'Abrindo a página de screenshots.',
+    icon: 'i-lucide-images'
+  })
+}
+
+function onRepoClick(e: Event) {
+  if (!props.item?.repoUrl) notifyMissing('GitHub', e)
+}
+
+function onDemoClick(e: Event) {
+  if (!props.item?.demoUrl) notifyMissing('Hospedagem', e)
 }
 </script>
 
 <template>
-  <USlideover
+  <USlideover v-reveal
     v-model:open="open"
     side="right"
     inset
@@ -52,12 +85,13 @@ function notify(msg: string) {
           </UBadge>
         </div>
 
+        <!-- Ações -->
         <div class="flex gap-3 flex-wrap">
           <UButton
             icon="i-lucide-images"
             variant="soft"
             :to="screenshotsPath"
-            @click="notify('Abrindo screenshots do projeto.')"
+            @click="onScreenshotsClick"
           >
             Ver screenshots
           </UButton>
@@ -65,10 +99,9 @@ function notify(msg: string) {
           <UButton
             icon="i-lucide-github"
             variant="soft"
-            :to="item?.repoUrl || ''"
+            :to="item?.repoUrl || '#'"
             target="_blank"
-            :disabled="!hasLink(item?.repoUrl)"
-            @click="notify('Abrindo GitHub em nova guia.')"
+            @click="onRepoClick"
           >
             GitHub
           </UButton>
@@ -76,37 +109,39 @@ function notify(msg: string) {
           <UButton
             icon="i-lucide-external-link"
             variant="soft"
-            :to="item?.demoUrl || ''"
+            :to="item?.demoUrl || '#'"
             target="_blank"
-            :disabled="!hasLink(item?.demoUrl)"
-            @click="notify('Abrindo link do projeto em nova guia.')"
+            @click="onDemoClick"
           >
-            Link
+            Hospedagem
           </UButton>
         </div>
 
+        <!-- Imagem -->
         <UCard :ui="{ body: 'p-3' }">
           <div class="rounded-xl overflow-hidden border border-default">
-            <img
-              v-if="item"
-              :src="item.coverImage"
-              :alt="item.title"
-              class="w-full object-cover"
-            />
+            <img v-if="item" :src="coverSrc" :alt="item.title" class="w-full object-cover" />
             <USkeleton v-else class="h-44 w-full" />
           </div>
         </UCard>
 
+        <!-- Detalhes: scroll só no desktop -->
         <UCard v-if="item?.details?.trim()" :ui="{ body: 'p-3 space-y-2' }">
-          <div class="flex items-center justify-between">
-            <p class="font-semibold">Detalhes</p>
+          <p class="font-semibold">Detalhes</p>
+
+          <div class="hidden lg:block">
+            <UScrollArea class="h-40 pr-2">
+              <p class="text-sm text-muted whitespace-pre-line">
+                {{ item.details }}
+              </p>
+            </UScrollArea>
           </div>
 
-          <UScrollArea class="h-40 pr-2">
+          <div class="lg:hidden">
             <p class="text-sm text-muted whitespace-pre-line">
               {{ item.details }}
             </p>
-          </UScrollArea>
+          </div>
         </UCard>
       </div>
     </template>

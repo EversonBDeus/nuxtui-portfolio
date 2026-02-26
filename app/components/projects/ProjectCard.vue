@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import type { Project, ProjectRole } from '~/data/projects'
 
-const props = defineProps<{
-  item: Project
-}>()
-
-const emit = defineEmits<{
-  (e: 'open', item: Project): void
-}>()
+const props = defineProps<{ item: Project }>()
+const emit = defineEmits<{ (e: 'open', item: Project): void }>()
 
 const roleLabel: Record<ProjectRole, string> = {
   frontend: 'Front-end',
@@ -20,45 +15,108 @@ const roleColor: Record<ProjectRole, 'primary' | 'secondary' | 'tertiary'> = {
   backend: 'secondary',
   fullstack: 'tertiary'
 }
+
+function openScreenshots(e: MouseEvent | KeyboardEvent) {
+  e.stopPropagation()
+  navigateTo(`/projects/${props.item.slug}`)
+}
 </script>
 
 <template>
-  <UCard
+  <UCard v-reveal
     class="group cursor-pointer"
     :ui="{ body: 'p-3 space-y-3' }"
     @click="emit('open', item)"
   >
-    <div class="relative rounded-xl overflow-hidden border border-default">
+    <!-- IMAGEM clicável = screenshots -->
+    <div
+      class="relative rounded-xl overflow-hidden border border-default focus:outline-none"
+      role="link"
+      tabindex="0"
+      @click="openScreenshots"
+      @keydown.enter="openScreenshots"
+      @keydown.space.prevent="openScreenshots"
+    >
       <img :src="item.coverImage" :alt="item.title" class="h-44 w-full object-cover" />
 
-      <div
-        class="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity
-               bg-gradient-to-t from-black/70 via-black/20 to-transparent"
-      />
+      <!-- overlay base -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 
-      <div class="absolute bottom-0 left-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-        <p class="text-sm font-semibold text-white line-clamp-1">
-          {{ item.title }}
-        </p>
-        <p class="text-xs text-white/80 line-clamp-2">
-          {{ item.shortDescription }}
-        </p>
-      </div>
-    </div>
-
-    <div class="flex items-center gap-2">
-      <p class="font-semibold line-clamp-1">
-        {{ item.title }}
-      </p>
-
-      <UBadge
-        class="ml-auto"
+      <!-- badges (mantém como está no Conteudo5) -->
+      <UBadge v-reveal
+        class="absolute top-2 left-2 z-10"
         :color="roleColor[item.role]"
         variant="solid"
-        size="sm"
+        size="xs"
       >
         {{ roleLabel[item.role] }}
       </UBadge>
+
+      <UBadge v-reveal
+        v-if="item.stack?.length"
+        class="absolute top-2 right-2 z-10 bg-black/40 text-white border border-white/10"
+        color="neutral"
+        variant="solid"
+        size="xs"
+      >
+        {{ item.stack.length }} techs
+      </UBadge>
+
+      <!-- ✅ HOVER INFO (desktop): mostra stack + dica -->
+      <div
+        class="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-3
+               opacity-0 transition-opacity duration-200
+               group-hover:opacity-100"
+      >
+        <div class="flex flex-wrap gap-1.5">
+          <UBadge v-reveal
+            v-for="t in (item.stack || []).slice(0, 4)"
+            :key="t"
+            color="neutral"
+            variant="solid"
+            size="xs"
+            class="bg-black/45 text-white border border-white/10"
+          >
+            {{ t }}
+          </UBadge>
+
+          <UBadge v-reveal
+            v-if="(item.stack || []).length > 4"
+            color="neutral"
+            variant="solid"
+            size="xs"
+            class="bg-black/45 text-white border border-white/10"
+          >
+            +{{ (item.stack || []).length - 4 }}
+          </UBadge>
+        </div>
+
+        <p class="mt-2 text-[11px] text-white/80">
+          Clique na imagem para screenshots • clique no card para detalhes
+        </p>
+      </div>
+
+      <!-- hint pequeno no canto (continua útil) -->
+      <div class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <UBadge v-reveal
+          color="neutral"
+          variant="solid"
+          size="xs"
+          class="bg-black/50 text-white border border-white/10"
+        >
+          Ver screenshots
+        </UBadge>
+      </div>
+    </div>
+
+    <!-- texto base (mobile e sempre visível) -->
+    <div class="text-left">
+      <p class="text-sm font-semibold line-clamp-1">
+        {{ item.title }}
+      </p>
+      <p class="text-xs text-muted line-clamp-2">
+        {{ item.shortDescription }}
+      </p>
     </div>
   </UCard>
 </template>

@@ -33,23 +33,48 @@ function onContactClick(label: string, url: string, e: Event) {
   if (!url) notifyMissing(label, e)
 }
 
-const downloadCV = () => {
-  isLoading.value = true
-  setTimeout(() => {
-    isLoading.value = false
+async function fileExists(url: string) {
+  try {
+    const head = await fetch(url, { method: 'HEAD' })
+    if (head.ok) return true
+    const get = await fetch(url, { method: 'GET' })
+    return get.ok
+  } catch {
+    return false
+  }
+}
+
+async function downloadCV() {
+  const url = profile.cv?.url || '/files/cv.pdf'
+  const ok = await fileExists(url)
+
+  if (!ok) {
     toast.add({
-      title: 'Download iniciado',
-      description: 'Seu currículo está sendo baixado.',
-      icon: 'i-lucide-download'
+      title: 'Currículo não encontrado',
+      description: 'Coloque o arquivo em public/files/cv.pdf (ou ajuste data/profile.ts).',
+      icon: 'i-lucide-file-x'
     })
-  }, 800)
+    return
+  }
+
+  toast.add({
+    title: 'Abrindo currículo',
+    description: 'O arquivo será aberto em uma nova guia.',
+    icon: 'i-lucide-download'
+  })
+
+  if (profile.cv?.openInNewTab) {
+    window.open(url, '_blank', 'noopener,noreferrer')
+  } else {
+    location.href = url
+  }
 }
 </script>
 
 <template>
   <section class="min-h-screen flex items-center justify-center pt-24 px-4">
     <div class="w-full max-w-3xl">
-      <UCard class="text-center surface-panel">
+      <UCard v-reveal class="text-center surface-panel">
         <div class="space-y-6 py-4">
           <!-- Avatar -->
           <div class="flex justify-center">
@@ -63,7 +88,7 @@ const downloadCV = () => {
                 alt="Foto de perfil"
                 class="w-full h-full object-cover"
               />
-              <UAvatar v-else size="3xl" icon="i-lucide-user" />
+              <UAvatar v-reveal v-else size="3xl" icon="i-lucide-user" />
             </div>
           </div>
 
@@ -86,7 +111,7 @@ const downloadCV = () => {
             <!-- Gatilho pequeno: “Sobre mim” -->
             <div class="pt-1 flex justify-center">
               <UTooltip text="Clique para abrir / fechar">
-                <UButton
+                <UButton v-reveal
                   variant="ghost"
                   color="neutral"
                   size="sm"
@@ -109,7 +134,7 @@ const downloadCV = () => {
 
           <!-- Redes sociais -->
           <div class="flex justify-center gap-4 sm:gap-6">
-            <UButton
+            <UButton v-reveal
               v-for="s in profile.socials"
               :key="s.label"
               variant="ghost"
@@ -125,21 +150,19 @@ const downloadCV = () => {
           <!-- Ações -->
           <div class="pt-1">
             <div class="flex items-center justify-center gap-4 flex-wrap">
-              <UButton
-                color="primary"
-                variant="solid"
-                size="xl"
-                icon="i-lucide-download"
-                :loading="isLoading"
-                loading-icon="i-lucide-loader-circle"
-                class="h-14 px-8 min-w-[220px] rounded-lg"
-                @click="downloadCV"
-              >
-                Download CV
-              </UButton>
+         <UButton v-reveal
+              color="primary"
+              variant="solid"
+              size="xl"
+              icon="i-lucide-download"
+              loading-auto
+              @click="downloadCV"
+            >
+              Download CV
+            </UButton>
 
               <div class="flex items-center gap-3">
-                <UButton
+                <UButton v-reveal
                   variant="soft"
                   size="xl"
                   class="h-14 w-14 justify-center rounded-lg"
@@ -149,7 +172,7 @@ const downloadCV = () => {
                   :ui="{ leadingIcon: 'brand-whatsapp' }"
                   @click="(e) => onContactClick('WhatsApp', profile.contact.whatsappUrl, e)"
                 />
-                <UButton
+                <UButton v-reveal
                   variant="soft"
                   size="xl"
                   class="h-14 w-14 justify-center rounded-lg"

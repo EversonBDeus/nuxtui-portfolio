@@ -34,7 +34,7 @@ const skillsByLevel = computed(() => {
 
 <template>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6">
-    <UCard
+    <UCard v-reveal
       v-for="lvl in levels"
       :key="lvl"
       :ui="{ body: 'p-4 space-y-3' }"

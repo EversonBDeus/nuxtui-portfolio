@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue'
 import { certificates } from '~/data/certificates'
 import type { Certificate } from '~/data/certificates'
 import CertificateCard from '~/components/certificates/CertificateCard.vue'
 import CertificateSlideover from '~/components/certificates/CertificateSlideover.vue'
+import { formatYm } from '~/utils/format'
 
 const viewMode = ref<'grid' | 'timeline'>('grid')
 
@@ -17,7 +19,7 @@ function openCertificate(item: Certificate) {
 const timelineItems = computed(() => {
   return certificates.map((c) => ({
     title: c.title,
-    date: `${c.startDate} → ${c.endDate}`,
+    date: `${formatYm(c.startDate)} → ${formatYm(c.endDate)}`,
     icon: 'i-lucide-award'
   }))
 })
@@ -52,7 +54,7 @@ const timelineItems = computed(() => {
 
     <div v-else>
       <div v-if="viewMode === 'grid'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        <CertificateCard
+        <CertificateCard v-reveal
           v-for="c in certificates"
           :key="c.id"
           :item="c"
