@@ -1,3 +1,6 @@
+import { computed } from 'vue'
+import { useCookie } from '#app'
+
 export type ThemePresetId =
   | 'ux-mastery'
   | 'neon-spectrum'
@@ -10,19 +13,67 @@ export type ThemePresetId =
   | 'sunset-lava'
   | 'cyber-lime'
 
+export type ThemeColorToken =
+  | 'aquatech-cyan'
+  | 'aquatech-electric'
+  | 'aquatech-mint'
+  | 'aquatech-teal'
+  | 'brand'
+  | 'candysky-blue'
+  | 'candysky-ice'
+  | 'candysky-sky'
+  | 'combo01-ink'
+  | 'combo01-paper'
+  | 'combo03-espresso'
+  | 'combo03-taupe'
+  | 'combo04-charcoal'
+  | 'combo05-blue'
+  | 'combo05-ice'
+  | 'combo05-ink'
+  | 'combo05-mint'
+  | 'lavasky-azure'
+  | 'lavasky-violet'
+  | 'neonspectrum-azure'
+  | 'neonspectrum-cyan'
+  | 'neonspectrum-deep'
+  | 'neonspectrum-green'
+  | 'neonspectrum-lime'
+  | 'ocean'
+  | 'pastelpop-butter'
+  | 'pastelpop-lilac'
+  | 'pastelpop-mint'
+  | 'pastelpop-sky'
+  | 'rosewine-berry'
+  | 'rosewine-crimson'
+  | 'rosewine-mauve'
+  | 'rosewine-petal'
+  | 'slate'
+  | 'sunrise-amber'
+  | 'sunrise-coral'
+  | 'sunrise-cream'
+  | 'sunrise-orange'
+  | 'sunrise-red'
+  | 'uxblue'
+  | 'uxgreen'
+  | 'uxpurple'
+  | 'uxred'
+
+export type ThemeColorRole =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'success'
+  | 'info'
+  | 'warning'
+  | 'error'
+  | 'neutral'
+
+export type ThemeColors = Record<ThemeColorRole, ThemeColorToken>
+
 export type ThemePreset = {
   id: ThemePresetId
   label: string
-  colors: {
-    primary: string
-    secondary: string
-    tertiary: string
-    success: string
-    info: string
-    warning: string
-    error: string
-    neutral: string
-  }
+  colors: ThemeColors
 }
 
 export const THEME_PRESETS: ThemePreset[] = [
@@ -37,10 +88,6 @@ export const THEME_PRESETS: ThemePreset[] = [
       info: 'candysky-sky',
       warning: 'sunrise-amber',
       error: 'uxred',
-
-      // ✅ IMPORTANTÍSSIMO (legibilidade):
-      // neutral controla "cinzas", textos muted, fundos e variantes soft/subtle.
-      // slate é um neutral equilibrado para light/dark.
       neutral: 'slate'
     }
   },
@@ -172,15 +219,19 @@ export const THEME_PRESETS: ThemePreset[] = [
   }
 ]
 
+const FALLBACK_PRESET = THEME_PRESETS[0] as ThemePreset
+
 export function useThemePresets() {
-  const cookie = useCookie<ThemePresetId>('theme', { default: () => 'cyber-lime' })
+  const themeCookie = useCookie<ThemePresetId>('theme', {
+    default: () => 'cyber-lime'
+  })
 
   const preset = computed<ThemePreset>(() => {
-    return THEME_PRESETS.find((t) => t.id === cookie.value) ?? THEME_PRESETS[0]
+    return THEME_PRESETS.find((item) => item.id === themeCookie.value) ?? FALLBACK_PRESET
   })
 
   function setPreset(id: ThemePresetId) {
-    cookie.value = id
+    themeCookie.value = id
   }
 
   return {

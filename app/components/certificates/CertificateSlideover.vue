@@ -13,16 +13,36 @@ const emit = defineEmits<{
 
 const open = computed({
   get: () => props.modelValue,
-  set: (v) => emit('update:modelValue', v)
+  set: (value: boolean) => emit('update:modelValue', value)
 })
 
-const imgSrc = computed(() => (props.item ? toPublicPath(props.item.image) : ''))
+const title = computed(() => props.item?.title || 'Certificado')
+const provider = computed(() => props.item?.provider || '')
+const description = computed(() => props.item?.description || '')
+
+const imgSrc = computed(() => (props.item?.image ? toPublicPath(props.item.image) : ''))
+const hasImage = computed(() => !!imgSrc.value)
+
+const viewUrl = computed(() => props.item?.viewUrl || '')
+const downloadUrl = computed(() => props.item?.downloadUrl || '')
+
+const canView = computed(() => !!viewUrl.value)
+const canDownload = computed(() => !!downloadUrl.value && downloadUrl.value !== viewUrl.value)
 
 const timelineItems = computed(() => {
   if (!props.item) return []
+
   return [
-    { title: 'Início', date: formatYm(props.item.startDate), icon: 'i-lucide-play' },
-    { title: 'Conclusão', date: formatYm(props.item.endDate), icon: 'i-lucide-check-circle' }
+    {
+      title: 'Início',
+      date: formatYm(props.item.startDate),
+      icon: 'i-lucide-play'
+    },
+    {
+      title: 'Conclusão',
+      date: formatYm(props.item.endDate),
+      icon: 'i-lucide-check-circle'
+    }
   ]
 })
 
@@ -45,7 +65,8 @@ function toastDownload() {
 }
 
 function openImage() {
-  if (!imgSrc.value) return
+  if (!hasImage.value || !import.meta.client) return
+
   toastOpen('Imagem do certificado')
   window.open(imgSrc.value, '_blank', 'noopener,noreferrer')
 }
@@ -56,22 +77,22 @@ function openImage() {
     v-model:open="open"
     side="right"
     inset
-    :title="item?.title || 'Certificado'"
-    :description="item?.provider"
+    :title="title"
+    :description="provider"
   >
     <template #body>
       <div class="space-y-5">
-        <p v-if="item?.description" class="text-sm text-muted">
-          {{ item.description }}
+        <p v-if="description" class="text-sm text-muted">
+          {{ description }}
         </p>
 
         <!-- Ações -->
-        <div class="flex gap-3 flex-wrap">
+        <div class="flex flex-wrap gap-3">
           <UButton
-            v-if="item?.viewUrl"
+            v-if="canView"
             icon="i-lucide-external-link"
             variant="soft"
-            :to="item.viewUrl"
+            :to="viewUrl"
             target="_blank"
             @click="toastOpen('Visualizar certificado')"
           >
@@ -79,10 +100,10 @@ function openImage() {
           </UButton>
 
           <UButton
-            v-if="item?.downloadUrl"
+            v-if="canDownload"
             icon="i-lucide-download"
             variant="soft"
-            :to="item.downloadUrl"
+            :to="downloadUrl"
             target="_blank"
             @click="toastDownload"
           >
@@ -93,6 +114,7 @@ function openImage() {
             icon="i-lucide-image"
             variant="soft"
             color="neutral"
+            :disabled="!hasImage"
             @click="openImage"
           >
             Abrir imagem
@@ -101,19 +123,19 @@ function openImage() {
 
         <!-- Imagem -->
         <UCard :ui="{ body: 'p-3' }">
-          <div class="rounded-lg overflow-hidden border border-default bg-muted">
+          <div class="overflow-hidden rounded-lg border border-default bg-muted">
             <img
-              v-if="item"
+              v-if="hasImage"
               :src="imgSrc"
-              :alt="item.title"
+              :alt="title"
               class="w-full object-cover"
-            />
+            >
             <USkeleton v-else class="h-56 w-full" />
           </div>
         </UCard>
 
         <!-- Timeline -->
-        <div class="space-y-2">
+        <div v-if="timelineItems.length" class="space-y-2">
           <h4 class="font-semibold">Linha do tempo</h4>
           <UTimeline :items="timelineItems" />
         </div>

@@ -1,15 +1,18 @@
 <script setup lang="ts">
-const siteName = 'Everson Deus • Portfólio'
+const siteName = 'Everson Boeira de Deus • Portfólio'
+const siteDescription =
+  'Portfólio de Everson Boeira de Deus com projetos, habilidades e certificados.'
+const ogImage = '/img/profile/avatar.jpeg'
 
 useSeoMeta({
   titleTemplate: (titleChunk) => (titleChunk ? `${titleChunk} · ${siteName}` : siteName),
-  description: 'Portfólio de Everson Deus. Projetos, habilidades e certificados.',
+  description: siteDescription,
   ogTitle: siteName,
-  ogDescription: 'Projetos, habilidades e certificados.',
+  ogDescription: siteDescription,
   ogType: 'website',
-  ogImage: '/og.png',
+  ogImage,
   twitterCard: 'summary_large_image',
-  twitterImage: '/og.png'
+  twitterImage: ogImage
 })
 </script>
 

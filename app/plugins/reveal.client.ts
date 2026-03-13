@@ -1,11 +1,10 @@
-// plugins/reveal.client.ts
 import { defineNuxtPlugin } from '#app'
 
 type RevealOptions = {
   once?: boolean
-  delay?: number // ms
-  duration?: number // ms
-  distance?: number // px
+  delay?: number
+  duration?: number
+  distance?: number
   origin?: 'bottom' | 'top' | 'left' | 'right'
   threshold?: number
   rootMargin?: string
@@ -23,17 +22,19 @@ const DEFAULTS: Required<RevealOptions> = {
 
 function getOptions(bindingValue: unknown): Required<RevealOptions> {
   if (bindingValue && typeof bindingValue === 'object') {
-    const v = bindingValue as RevealOptions
+    const value = bindingValue as RevealOptions
+
     return {
-      once: v.once ?? DEFAULTS.once,
-      delay: v.delay ?? DEFAULTS.delay,
-      duration: v.duration ?? DEFAULTS.duration,
-      distance: v.distance ?? DEFAULTS.distance,
-      origin: v.origin ?? DEFAULTS.origin,
-      threshold: v.threshold ?? DEFAULTS.threshold,
-      rootMargin: v.rootMargin ?? DEFAULTS.rootMargin
+      once: value.once ?? DEFAULTS.once,
+      delay: value.delay ?? DEFAULTS.delay,
+      duration: value.duration ?? DEFAULTS.duration,
+      distance: value.distance ?? DEFAULTS.distance,
+      origin: value.origin ?? DEFAULTS.origin,
+      threshold: value.threshold ?? DEFAULTS.threshold,
+      rootMargin: value.rootMargin ?? DEFAULTS.rootMargin
     }
   }
+
   return DEFAULTS
 }
 
@@ -42,18 +43,25 @@ export default defineNuxtPlugin((nuxtApp) => {
     mounted(el, binding) {
       const opts = getOptions(binding.value)
 
-      // classes base
       el.classList.add('reveal')
       el.classList.add(`reveal--${opts.origin}`)
 
-      // css vars (para controlar sem ficar criando mil classes)
       el.style.setProperty('--reveal-delay', `${opts.delay}ms`)
       el.style.setProperty('--reveal-duration', `${opts.duration}ms`)
       el.style.setProperty('--reveal-distance', `${opts.distance}px`)
 
-      // evita reprocessar o mesmo elemento
-      const already = (el as any).__revealObserver as IntersectionObserver | undefined
-      if (already) already.disconnect()
+      if (!('IntersectionObserver' in window)) {
+        el.classList.add('reveal--visible')
+        return
+      }
+
+      const existingObserver = (el as HTMLElement & {
+        __revealObserver?: IntersectionObserver
+      }).__revealObserver
+
+      if (existingObserver) {
+        existingObserver.disconnect()
+      }
 
       const observer = new IntersectionObserver(
         (entries) => {
@@ -73,13 +81,22 @@ export default defineNuxtPlugin((nuxtApp) => {
         }
       )
 
-      ;(el as any).__revealObserver = observer
+      ;(el as HTMLElement & { __revealObserver?: IntersectionObserver }).__revealObserver = observer
       observer.observe(el)
     },
+
     unmounted(el) {
-      const obs = (el as any).__revealObserver as IntersectionObserver | undefined
-      if (obs) obs.disconnect()
-      delete (el as any).__revealObserver
+      const observer = (el as HTMLElement & {
+        __revealObserver?: IntersectionObserver
+      }).__revealObserver
+
+      if (observer) {
+        observer.disconnect()
+      }
+
+      delete (el as HTMLElement & {
+        __revealObserver?: IntersectionObserver
+      }).__revealObserver
     }
   })
 })
