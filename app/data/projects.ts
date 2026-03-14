@@ -16,50 +16,50 @@ export type Project = {
 }
 
 export const projects: Project[] = [
-  {
-    id: 'mini-portfolio',
-    slug: 'mini-portfolio',
-    title: 'Mini Portfólio',
-    role: 'frontend',
-    shortDescription: 'Portfólio responsivo com Nuxt 4 + Nuxt UI.',
-    description:
-      'Projeto de portfólio pensado para evoluir para um SaaS com login, templates e edição de conteúdo.',
-    // ✅ Se quiser, coloque um texto longo aqui (multi-linhas)
-    details: `O que foi feito:
-- Layout responsivo (mobile-first)
-- Tabs com Projetos / Habilidades / Certificados
-- Slideover para detalhes
-
-Melhorias futuras:
-- Login admin (Supabase)
-- Templates por usuário
-- Editor de conteúdo`,
-    stack: ['Nuxt 4', 'Nuxt UI', 'TypeScript', 'Tailwind CSS'],
-    coverImage: '/projects/mini-portfolio/cover.jpg',
-    repoUrl: '', // coloque https://... para aparecer o botão
-    demoUrl: '', // coloque https://... para aparecer o botão
-    screenshots: [
-      '/projects/mini-portfolio/shot-1.png',
-      '/projects/mini-portfolio/shot-2.png',
-      '/projects/mini-portfolio/shot-3.png'
-    ]
-  },
-  {
-    id: 'sistema-agendamentos',
-    slug: 'sistema-agendamentos',
-    title: 'Sistema de Agendamentos',
-    role: 'fullstack',
-    shortDescription: 'Agendamentos com calendário e painel admin.',
-    description:
-      'Sistema com foco em experiência do usuário e visão do administrador para acompanhar horários.',
-    // details: ''  // ✅ se não colocar, não aparece nada
-    stack: ['Vue', 'Nuxt', 'Pinia', 'UI Components'],
-    coverImage: '/projects/sistema-agendamentos/cover.png',
-    repoUrl: '',
-    demoUrl: '',
-    screenshots: [
-      '/projects/sistema-agendamentos/shot-1.png',
-      '/projects/sistema-agendamentos/shot-2.png'
-    ]
-  }
+{
+  id: 'tabela-registro',
+  slug: 'tabela-registro',
+  title: 'Tabela Registro de BA',
+  role: 'fullstack',
+  shortDescription: 'Registro e consulta de protocolos BA de reparo técnico.',
+  description:
+    'Sistema interno para registrar e acompanhar protocolos BA de reparo técnico.',
+  details:
+    'Aplicação criada para substituir uma ferramenta antiga da empresa que deixou de funcionar. O sistema permite que os agentes do call center consultem rapidamente se o reparo está aberto ou encerrado e também adicionem novos registros para controle e acompanhamento.',
+  stack: ['Vue.js 3', 'Nuxt.js 4', 'Nuxt UI 4', 'Tailwind CSS', 'AWS', 'Amplify', 'Charts.css'],
+  coverImage: 'projects/tabela-registro/cover.png',
+  screenshots: [
+    'projects/tabela-registro/shot-01.png',
+    'projects/tabela-registro/shot-02.png',
+    'projects/tabela-registro/shot-03.png',
+    'projects/tabela-registro/shot-04.png',
+    'projects/tabela-registro/shot-05.png'
+  ],
+  repoUrl: 'https://github.com/EversonBDeus/Tabela-Registro-de-Bas',
+  demoUrl: 'https://master.d2l8r684q1tda0.amplifyapp.com/'
+},
+{
+  id: 'mascaras-st',
+  slug: 'mascaras-st',
+  title: 'Máscaras ST',
+  role: 'frontend',
+  shortDescription: 'Coleção de máscaras operacionais para agilizar o atendimento ao cliente.',
+  description:
+    'Projeto com três máscaras de atendimento para facilitar a rotina operacional e padronizar respostas.',
+  details:
+    'Aplicação criada para agilizar o atendimento ao cliente com três fluxos principais: máscara para perfilamento do atendimento, máscara para problemas no home office e máscara para abertura de reparo. O objetivo é reduzir tempo operacional, organizar o atendimento e facilitar o uso pelos agentes.',
+  stack: ['HTML', 'CSS', 'JavaScript', 'Tailwind CSS'],
+  coverImage: 'projects/mascara-form/cover.png',
+  screenshots: [
+    'projects/mascara-form/shot-01.png',
+    'projects/mascara-form/shot-02.png',
+    'projects/mascara-form/shot-03.png',
+    'projects/mascara-form/shot-04.png',
+    'projects/mascara-form/shot-05.png',
+    'projects/mascara-form/shot-06.png'
+  ],
+  repoUrl: 'https://github.com/EversonBDeus/mascaras-st',
+  demoUrl: 'https://eversonbdeus.github.io/mascaras-st/'
+}
+  
 ]
