@@ -16,6 +16,28 @@ export type Project = {
 }
 
 export const projects: Project[] = [
+  {
+  id: 'lumio-saass',
+  slug: 'lumio-saass',
+  title: 'Lumio',
+  role: 'fullstack',
+  shortDescription: 'Plataforma para criar, personalizar e publicar portfólios profissionais.',
+  description:
+    'Aplicação web desenvolvida com Nuxt 3 e Supabase para criação e publicação de portfólios profissionais com templates modernos.',
+  details:
+    'Lumio é uma plataforma de portfólios profissionais desenvolvida com Nuxt 3 e Supabase. A aplicação permite criar, personalizar e publicar portfólios com templates modernos, editor visual, gerenciamento de projetos e publicação com slug público, oferecendo uma solução completa para desenvolvedores e profissionais exibirem seus trabalhos online.',
+  stack: ['Vue 3','Nuxt 4', 'TypeScript','Tailwind CSS','Supabase','Html','Css','ScrollReveal'],
+  coverImage: 'projects/lumio-saass/cover.jpeg',
+  screenshots: [
+    'projects/lumio-saass/shot-01.jpeg',
+    'projects/lumio-saass/shot-02.jpeg',
+    'projects/lumio-saass/shot-03.jpeg',
+    'projects/lumio-saass/shot-04.jpeg',
+    'projects/lumio-saass/shot-05.jpeg',
+    'projects/lumio-saass/shot-06.jpeg'
+  ],
+  demoUrl: 'https://lumio-web.vercel.app/'
+},
 {
   id: 'tabela-registro',
   slug: 'tabela-registro',
