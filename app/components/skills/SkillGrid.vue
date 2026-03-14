@@ -17,16 +17,17 @@ const colorByLevel: Record<SkillLevel, 'primary' | 'secondary' | 'tertiary'> = {
 </script>
 
 <template>
-  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-    <UCard v-reveal
+  <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4">
+    <UCard
       v-for="skill in items"
       :key="skill.name"
+      v-reveal
       class="text-center"
-      :ui="{ body: 'p-4 flex flex-col items-center gap-2' }"
+      :ui="{ body: 'p-3 sm:p-4 flex flex-col items-center gap-2' }"
     >
-      <UIcon :name="skill.icon" class="text-3xl" :class="skill.colorClass || ''" />
+      <UIcon :name="skill.icon" class="text-2xl sm:text-3xl" :class="skill.colorClass || ''" />
 
-      <p class="text-sm font-medium leading-tight">
+      <p class="text-xs font-medium leading-tight sm:text-sm">
         {{ skill.name }}
       </p>
 

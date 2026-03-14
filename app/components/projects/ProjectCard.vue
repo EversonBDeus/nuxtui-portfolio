@@ -23,28 +23,27 @@ function openScreenshots(e: MouseEvent | KeyboardEvent) {
 </script>
 
 <template>
-  <UCard v-reveal
+  <UCard
+    v-reveal
     class="group cursor-pointer"
-    :ui="{ body: 'p-3 space-y-3' }"
+    :ui="{ body: 'p-2 sm:p-3 space-y-2 sm:space-y-3' }"
     @click="emit('open', item)"
   >
-    <!-- IMAGEM clicável = screenshots -->
     <div
-      class="relative rounded-xl overflow-hidden border border-default focus:outline-none"
+      class="relative overflow-hidden rounded-xl border border-default focus:outline-none"
       role="link"
       tabindex="0"
       @click="openScreenshots"
       @keydown.enter="openScreenshots"
       @keydown.space.prevent="openScreenshots"
     >
-      <img :src="item.coverImage" :alt="item.title" class="h-44 w-full object-cover" />
+      <img :src="item.coverImage" :alt="item.title" class="h-32 w-full object-cover sm:h-44" />
 
-      <!-- overlay base -->
       <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 
-      <!-- badges (mantém como está no Conteudo5) -->
-      <UBadge v-reveal
-        class="absolute top-2 left-2 z-10"
+      <UBadge
+        v-reveal
+        class="absolute left-2 top-2 z-10"
         :color="roleColor[item.role]"
         variant="solid"
         size="xs"
@@ -52,9 +51,10 @@ function openScreenshots(e: MouseEvent | KeyboardEvent) {
         {{ roleLabel[item.role] }}
       </UBadge>
 
-      <UBadge v-reveal
+      <UBadge
         v-if="item.stack?.length"
-        class="absolute top-2 right-2 z-10 bg-black/40 text-white border border-white/10"
+        v-reveal
+        class="absolute right-2 top-2 z-10 border border-white/10 bg-black/40 text-white"
         color="neutral"
         variant="solid"
         size="xs"
@@ -62,30 +62,29 @@ function openScreenshots(e: MouseEvent | KeyboardEvent) {
         {{ item.stack.length }} techs
       </UBadge>
 
-      <!-- ✅ HOVER INFO (desktop): mostra stack + dica -->
       <div
-        class="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-3
-               opacity-0 transition-opacity duration-200
-               group-hover:opacity-100"
+        class="pointer-events-none absolute inset-x-0 bottom-0 z-10 hidden p-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100 sm:block"
       >
         <div class="flex flex-wrap gap-1.5">
-          <UBadge v-reveal
+          <UBadge
             v-for="t in (item.stack || []).slice(0, 4)"
             :key="t"
+            v-reveal
             color="neutral"
             variant="solid"
             size="xs"
-            class="bg-black/45 text-white border border-white/10"
+            class="border border-white/10 bg-black/45 text-white"
           >
             {{ t }}
           </UBadge>
 
-          <UBadge v-reveal
+          <UBadge
             v-if="(item.stack || []).length > 4"
+            v-reveal
             color="neutral"
             variant="solid"
             size="xs"
-            class="bg-black/45 text-white border border-white/10"
+            class="border border-white/10 bg-black/45 text-white"
           >
             +{{ (item.stack || []).length - 4 }}
           </UBadge>
@@ -95,26 +94,13 @@ function openScreenshots(e: MouseEvent | KeyboardEvent) {
           Clique na imagem para screenshots • clique no card para detalhes
         </p>
       </div>
-
-      <!-- hint pequeno no canto (continua útil) -->
-      <div class="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-        <UBadge v-reveal
-          color="neutral"
-          variant="solid"
-          size="xs"
-          class="bg-black/50 text-white border border-white/10"
-        >
-          Ver screenshots
-        </UBadge>
-      </div>
     </div>
 
-    <!-- texto base (mobile e sempre visível) -->
     <div class="text-left">
-      <p class="text-sm font-semibold line-clamp-1">
+      <p class="line-clamp-1 text-sm font-semibold sm:text-base">
         {{ item.title }}
       </p>
-      <p class="text-xs text-muted line-clamp-2">
+      <p class="line-clamp-2 text-xs text-muted sm:text-sm">
         {{ item.shortDescription }}
       </p>
     </div>

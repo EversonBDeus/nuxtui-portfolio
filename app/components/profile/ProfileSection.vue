@@ -3,7 +3,6 @@ import PortfolioTabs from '~/components/tabs/PortfolioTabs.vue'
 import AboutAccordion from '~/components/profile/AboutAccordion.vue'
 import { profile } from '~/data/profile'
 
-const isLoading = ref(false)
 const avatarOk = ref(true)
 const isAboutOpen = ref(false)
 
@@ -72,23 +71,25 @@ async function downloadCV() {
 </script>
 
 <template>
-  <section class="min-h-screen flex items-center justify-center pt-24 px-4">
-    <div class="w-full max-w-3xl">
-      <UCard v-reveal class="text-center surface-panel">
-        <div class="space-y-6 py-4">
-          <!-- Avatar -->
+  <section class="min-h-screen px-2 pt-20 sm:px-4 sm:pt-24">
+    <div class="mx-auto w-full max-w-4xl">
+      <UCard
+        v-reveal
+        class="surface-panel text-center"
+        :ui="{ body: 'p-3 sm:p-6 md:p-8' }"
+      >
+        <div class="space-y-4 sm:space-y-6">
           <div class="flex justify-center">
             <div
-              class="rounded-full border-4 border-primary shadow-lg overflow-hidden
-                     w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 flex items-center justify-center"
+              class="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-4 border-primary shadow-lg sm:h-40 sm:w-40 md:h-52 md:w-52"
             >
               <img
                 v-if="avatarOk"
                 :src="profile.avatarSrc"
                 alt="Foto de perfil"
-                class="w-full h-full object-cover"
+                class="h-full w-full object-cover"
               />
-              <UAvatar v-reveal v-else size="3xl" icon="i-lucide-user" />
+              <UAvatar v-else size="3xl" icon="i-lucide-user" />
             </div>
           </div>
 
@@ -100,18 +101,19 @@ async function downloadCV() {
             variant="soft"
           />
 
-          <!-- Nome, headline e Sobre mim -->
-          <div class="space-y-1">
-            <h1 class="text-3xl sm:text-4xl font-bold">{{ profile.name }}</h1>
+          <div class="space-y-2">
+            <h1 class="text-2xl font-bold leading-tight sm:text-4xl md:text-5xl">
+              {{ profile.name }}
+            </h1>
 
-            <p class="text-base sm:text-lg text-muted">
+            <p class="mx-auto max-w-2xl text-sm leading-7 text-muted sm:text-lg">
               {{ profile.headline }}
             </p>
 
-            <!-- Gatilho pequeno: “Sobre mim” -->
-            <div class="pt-1 flex justify-center">
+            <div class="flex justify-center pt-1">
               <UTooltip text="Clique para abrir / fechar">
-                <UButton v-reveal
+                <UButton
+                  v-reveal
                   variant="ghost"
                   color="neutral"
                   size="sm"
@@ -124,21 +126,21 @@ async function downloadCV() {
               </UTooltip>
             </div>
 
-            <!-- Accordion oculto e pequeno -->
             <div v-if="isAboutOpen" class="mt-2 flex justify-center">
-              <div class="w-full max-w-sm">
+              <div class="w-full max-w-md">
                 <AboutAccordion />
               </div>
             </div>
           </div>
 
-          <!-- Redes sociais -->
-          <div class="flex justify-center gap-4 sm:gap-6">
-            <UButton v-reveal
+          <div class="flex justify-center gap-3 sm:gap-6">
+            <UButton
               v-for="s in profile.socials"
               :key="s.label"
+              v-reveal
               variant="ghost"
               size="lg"
+              class="h-11 w-11 justify-center sm:h-14 sm:w-14"
               :to="s.url || '#'"
               :aria-label="s.label"
               :ui="{ leadingIcon: s.brandClass }"
@@ -147,35 +149,35 @@ async function downloadCV() {
             />
           </div>
 
-          <!-- Ações -->
           <div class="pt-1">
-            <div class="flex items-center justify-center gap-4 flex-wrap">
-         <UButton v-reveal
-              color="primary"
-              variant="solid"
-              size="xl"
-              icon="i-lucide-download"
-              loading-auto
-              @click="downloadCV"
-            >
-              Download CV
-            </UButton>
+            <div class="flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+              <UButton
+                v-reveal
+                color="primary"
+                variant="solid"
+                icon="i-lucide-download"
+                class="w-full justify-center sm:w-auto"
+                loading-auto
+                @click="downloadCV"
+              >
+                Download CV
+              </UButton>
 
               <div class="flex items-center gap-3">
-                <UButton v-reveal
+                <UButton
+                  v-reveal
                   variant="soft"
-                  size="xl"
-                  class="h-14 w-14 justify-center rounded-lg"
+                  class="h-12 w-12 justify-center rounded-lg sm:h-14 sm:w-14"
                   aria-label="WhatsApp"
                   :to="profile.contact.whatsappUrl || '#'"
                   icon="i-simple-icons-whatsapp"
                   :ui="{ leadingIcon: 'brand-whatsapp' }"
                   @click="(e) => onContactClick('WhatsApp', profile.contact.whatsappUrl, e)"
                 />
-                <UButton v-reveal
+                <UButton
+                  v-reveal
                   variant="soft"
-                  size="xl"
-                  class="h-14 w-14 justify-center rounded-lg"
+                  class="h-12 w-12 justify-center rounded-lg sm:h-14 sm:w-14"
                   aria-label="E-mail"
                   :to="profile.contact.emailUrl || '#'"
                   icon="i-lucide-mail"
@@ -185,9 +187,8 @@ async function downloadCV() {
             </div>
           </div>
 
-          <!-- Tabs -->
-          <div class="pt-2">
-            <USeparator class="my-6" />
+          <div class="pt-1 sm:pt-2">
+            <USeparator class="my-4 sm:my-6" />
             <PortfolioTabs />
           </div>
         </div>

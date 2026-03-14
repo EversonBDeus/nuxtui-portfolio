@@ -6,27 +6,26 @@ const isThemeOpen = ref(false)
 </script>
 
 <template>
-  <!-- UHeader (Nuxt UI) + visual transparente (sem barra preta) -->
-  <UHeader v-reveal
-    class="fixed top-0 left-0 right-0 z-50"
+  <UHeader
+    v-reveal
+    class="fixed left-0 right-0 top-0 z-50"
     :ui="{
-      root: 'bg-transparent border-0 shadow-none',
-      container: 'flex items-center justify-end h-16 px-4'
+      root: 'border-0 bg-transparent shadow-none',
+      container: 'flex h-14 items-center justify-end px-3 sm:h-16 sm:px-4'
     }"
   >
     <template #right>
-      <div class="flex items-center gap-2">
-        <!-- Seletor de temas -->
+      <div class="flex items-center gap-1 sm:gap-2">
         <UPopover v-model:open="isThemeOpen" placement="bottom-end">
           <UButton
             icon="i-lucide-palette"
             variant="ghost"
-            size="lg"
+            size="md"
             aria-label="Selecionar tema"
           />
 
           <template #content>
-            <div class="w-64 p-3 space-y-2">
+            <div class="w-64 space-y-2 p-3">
               <div class="text-xs text-muted">
                 Tema atual
               </div>
@@ -43,11 +42,10 @@ const isThemeOpen = ref(false)
           </template>
         </UPopover>
 
-        <!-- Modo escuro/claro -->
         <UButton
           :icon="colorMode.value === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
           variant="ghost"
-          size="lg"
+          size="md"
           aria-label="Alternar modo"
           @click="colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'"
         />
