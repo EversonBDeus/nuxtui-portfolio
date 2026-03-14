@@ -13,7 +13,6 @@ useHead(() => ({
 const toast = useToast()
 const isLink = (u?: string) => !!u && u.startsWith('http')
 
-// ✅ Só usa o layout “docs 3D” se tiver bastante imagens
 const useFancyMarquee = computed(() => (project.value?.screenshots?.length || 0) >= 8)
 
 const shots = computed(() => (project.value?.screenshots || []).map(toPublicPath))
@@ -32,9 +31,8 @@ function openShot(src: string) {
 </script>
 
 <template>
-  <div class="pt-20 px-4">
-    <div class="max-w-6xl mx-auto space-y-6">
-      <!-- Cabeçalho -->
+  <div class="px-4 pt-20">
+    <div class="mx-auto max-w-6xl space-y-6">
       <div class="flex items-center justify-between gap-3">
         <div class="min-w-0">
           <h1 class="text-2xl font-bold">
@@ -43,7 +41,7 @@ function openShot(src: string) {
           <p v-if="project" class="text-sm text-muted">
             Screenshots do projeto (rolagem infinita)
           </p>
-          <p v-if="project && shots.length" class="text-xs text-muted mt-1">
+          <p v-if="project && shots.length" class="mt-1 text-xs text-muted">
             Dica: clique em uma imagem para abrir em tamanho real.
           </p>
         </div>
@@ -53,16 +51,15 @@ function openShot(src: string) {
         </UButton>
       </div>
 
-      <!-- Descrição + Links -->
       <UCard v-if="project" :ui="{ body: 'p-4 space-y-3' }">
         <p class="text-sm text-toned">
           {{ project.description }}
         </p>
 
-        <div class="flex gap-3 flex-wrap">
+        <div class="flex flex-wrap gap-3">
           <UButton
             v-if="isLink(project.repoUrl)"
-            icon="i-lucide-github"
+            icon="i-simple-icons-github"
             variant="soft"
             :to="project.repoUrl"
             target="_blank"
@@ -82,7 +79,6 @@ function openShot(src: string) {
         </div>
       </UCard>
 
-      <!-- Estados vazios -->
       <UEmpty
         v-if="!project"
         icon="i-lucide-triangle-alert"
@@ -97,10 +93,9 @@ function openShot(src: string) {
         description="Adicione imagens em public/projects/<slug>/ e liste em data/projects.ts."
       />
 
-      <!-- ✅ Layout simples (poucas imagens): centralizado, sem cortar -->
       <div
         v-else-if="!useFancyMarquee"
-        class="rounded-xl border border-default overflow-hidden bg-muted p-4"
+        class="overflow-hidden rounded-xl border border-default bg-muted p-4"
       >
         <UMarquee pause-on-hover :overlay="false">
           <div class="flex items-center gap-4 pr-4">
@@ -114,8 +109,8 @@ function openShot(src: string) {
                 <img
                   :src="src"
                   :alt="`Screenshot ${i + 1}`"
-                  class="aspect-video border border-default rounded-lg bg-white object-contain cursor-zoom-in"
-                />
+                  class="aspect-video cursor-zoom-in rounded-lg border border-default bg-white object-contain"
+                >
               </button>
             </UCard>
           </div>
@@ -133,18 +128,17 @@ function openShot(src: string) {
                 <img
                   :src="src"
                   :alt="`Screenshot alt ${i + 1}`"
-                  class="aspect-video border border-default rounded-lg bg-white object-contain cursor-zoom-in"
-                />
+                  class="aspect-video cursor-zoom-in rounded-lg border border-default bg-white object-contain"
+                >
               </button>
             </UCard>
           </div>
         </UMarquee>
       </div>
 
-      <!-- ✅ Layout “docs 3D” (8+ imagens): estilo documentação -->
       <div
         v-else
-        class="relative w-full h-[420px] bg-muted overflow-hidden rounded-xl border border-default"
+        class="relative h-[420px] w-full overflow-hidden rounded-xl border border-default bg-muted"
       >
         <UMarquee
           v-if="col1.length"
@@ -167,8 +161,8 @@ function openShot(src: string) {
               width="460"
               height="258"
               :alt="`Screenshot ${i + 1}`"
-              class="aspect-video border border-default rounded-lg bg-white object-contain cursor-zoom-in"
-            />
+              class="aspect-video cursor-zoom-in rounded-lg border border-default bg-white object-contain"
+            >
           </button>
         </UMarquee>
 
@@ -192,8 +186,8 @@ function openShot(src: string) {
               width="460"
               height="258"
               :alt="`Screenshot ${i + 1}`"
-              class="aspect-video border border-default rounded-lg bg-white object-contain cursor-zoom-in"
-            />
+              class="aspect-video cursor-zoom-in rounded-lg border border-default bg-white object-contain"
+            >
           </button>
         </UMarquee>
 
@@ -218,8 +212,8 @@ function openShot(src: string) {
               width="460"
               height="258"
               :alt="`Screenshot ${i + 1}`"
-              class="aspect-video border border-default rounded-lg bg-white object-contain cursor-zoom-in"
-            />
+              class="aspect-video cursor-zoom-in rounded-lg border border-default bg-white object-contain"
+            >
           </button>
         </UMarquee>
       </div>

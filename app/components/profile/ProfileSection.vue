@@ -176,11 +176,10 @@ async function downloadCV() {
                   variant="soft"
                   size="xl"
                   class="h-14 w-14 justify-center rounded-lg"
-                  aria-label="Telegram"
-                  :to="profile.contact.telegramUrl || '#'"
-                  icon="i-simple-icons-telegram"
-                  :ui="{ leadingIcon: 'brand-telegram' }"
-                  @click="(e) => onContactClick('Telegram', profile.contact.telegramUrl, e)"
+                  aria-label="E-mail"
+                  :to="profile.contact.emailUrl || '#'"
+                  icon="i-lucide-mail"
+                  @click="(e) => onContactClick('E-mail', profile.contact.emailUrl, e)"
                 />
               </div>
             </div>

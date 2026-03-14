@@ -13,7 +13,7 @@ const emit = defineEmits<{
 
 const open = computed({
   get: () => props.modelValue,
-  set: (v) => emit('update:modelValue', v)
+  set: (value: boolean) => emit('update:modelValue', value)
 })
 
 const toast = useToast()
@@ -47,7 +47,6 @@ function onScreenshotsClick(e: Event) {
     return
   }
 
-  // deixa a navegação do :to acontecer, mas fecha o slideover + toast
   open.value = false
   toast.add({
     title: 'Screenshots',
@@ -66,7 +65,8 @@ function onDemoClick(e: Event) {
 </script>
 
 <template>
-  <USlideover v-reveal
+  <USlideover
+    v-reveal
     v-model:open="open"
     side="right"
     inset
@@ -85,8 +85,7 @@ function onDemoClick(e: Event) {
           </UBadge>
         </div>
 
-        <!-- Ações -->
-        <div class="flex gap-3 flex-wrap">
+        <div class="flex flex-wrap gap-3">
           <UButton
             icon="i-lucide-images"
             variant="soft"
@@ -97,7 +96,7 @@ function onDemoClick(e: Event) {
           </UButton>
 
           <UButton
-            icon="i-lucide-github"
+            icon="i-simple-icons-github"
             variant="soft"
             :to="item?.repoUrl || '#'"
             target="_blank"
@@ -117,28 +116,26 @@ function onDemoClick(e: Event) {
           </UButton>
         </div>
 
-        <!-- Imagem -->
         <UCard :ui="{ body: 'p-3' }">
-          <div class="rounded-xl overflow-hidden border border-default">
-            <img v-if="item" :src="coverSrc" :alt="item.title" class="w-full object-cover" />
+          <div class="overflow-hidden rounded-xl border border-default">
+            <img v-if="item" :src="coverSrc" :alt="item.title" class="w-full object-cover">
             <USkeleton v-else class="h-44 w-full" />
           </div>
         </UCard>
 
-        <!-- Detalhes: scroll só no desktop -->
         <UCard v-if="item?.details?.trim()" :ui="{ body: 'p-3 space-y-2' }">
           <p class="font-semibold">Detalhes</p>
 
           <div class="hidden lg:block">
             <UScrollArea class="h-40 pr-2">
-              <p class="text-sm text-muted whitespace-pre-line">
+              <p class="whitespace-pre-line text-sm text-muted">
                 {{ item.details }}
               </p>
             </UScrollArea>
           </div>
 
           <div class="lg:hidden">
-            <p class="text-sm text-muted whitespace-pre-line">
+            <p class="whitespace-pre-line text-sm text-muted">
               {{ item.details }}
             </p>
           </div>

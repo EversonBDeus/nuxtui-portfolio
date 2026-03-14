@@ -12,8 +12,8 @@ export type AboutItem = {
 }
 
 export const profile = {
-  name: 'Everson Deus',
-  headline: 'Desenvolvedor Web',
+  name: 'Everson Boeira de Deus',
+  headline: 'Desenvolvedor Full Stack | Vue.js | Node.js | Suporte Técnico',
   avatarSrc: '/img/profile/avatar.jpeg',
 
   cv: {
@@ -22,32 +22,43 @@ export const profile = {
   },
 
   socials: [
-    { label: 'LinkedIn', icon: 'i-lucide-linkedin', url: '', brandClass: 'brand-linkedin' },
-    { label: 'GitHub', icon: 'i-lucide-github', url: '', brandClass: 'brand-github' },
-    { label: 'Instagram', icon: 'i-lucide-instagram', url: '', brandClass: 'brand-instagram' }
+    {
+      label: 'LinkedIn',
+      icon: 'i-simple-icons-linkedin',
+      url: 'https://www.linkedin.com/in/everson-deus',
+      brandClass: 'brand-linkedin'
+    },
+    {
+      label: 'GitHub',
+      icon: 'i-simple-icons-github',
+      url: 'https://github.com/EversonBDeus',
+      brandClass: 'brand-github'
+    }
   ] satisfies SocialLink[],
 
   contact: {
-    whatsappUrl: '',
-    telegramUrl: ''
+    whatsappUrl: 'https://wa.me/5567991014315',
+    emailUrl: 'mailto:everson.deus@outlook.com.br'
   },
 
-  // ✅ voltou (era isso que alimentava o Accordion do "Sobre mim")
   about: [
     {
       label: 'Sobre mim',
       icon: 'i-lucide-user',
-      content: 'Escreva aqui um resumo curto sobre você.'
+      content:
+        'Profissional de TI com experiência em desenvolvimento web e suporte técnico. Atuo na criação de interfaces responsivas, construção de sistemas e resolução de problemas com foco em eficiência, qualidade e boa experiência do usuário.'
     },
     {
-      label: 'Stack e foco',
+      label: 'Stack principal',
       icon: 'i-lucide-code',
-      content: 'Liste as tecnologias que você domina e o que você gosta de construir.'
+      content:
+        'Trabalho principalmente com JavaScript, TypeScript, Vue.js, Nuxt.js, Node.js, Tailwind CSS, Bootstrap, Supabase, AWS, MySQL e MongoDB. Tenho foco em aplicações web modernas, organização de código e interfaces bem estruturadas.'
     },
     {
-      label: 'Próximo passo (SaaS)',
-      icon: 'i-lucide-rocket',
-      content: 'Explique em 2–3 linhas sua visão do portfólio virar um SaaS com templates.'
+      label: 'Experiência atual',
+      icon: 'i-lucide-briefcase',
+      content:
+        'Atualmente atuo com suporte técnico em fibra, atendendo casos recorrentes e mais sensíveis, com diagnóstico de falhas, orientação ao cliente, análise técnica e busca por soluções mais precisas e resolutivas.'
     }
   ] satisfies AboutItem[]
 }

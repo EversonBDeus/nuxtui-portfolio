@@ -1,43 +1,35 @@
 import { projects } from './app/data/projects'
 
+const isDev = process.env.NODE_ENV === 'development'
 const projectRoutes = projects.map((project) => `/projects/${project.slug}`)
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
 
   typescript: {
-    typeCheck: true
+    typeCheck: false
   },
 
   devtools: {
-    enabled: process.env.NODE_ENV === 'development',
-    componentInspector: true,
-    vueDevTools: true,
-    viteInspect: true,
-    vscode: {
-      enabled: false,
-      startOnBoot: false
-    },
-    timeline: {
-      enabled: true,
-      functions: {
-        includeFrom: ['#app', '@unhead/vue']
-      }
-    },
-    assets: {
-      uploadExtensions: ['png', 'jpg', 'jpeg', 'webp', 'pdf']
-    },
-    telemetry: false
+    enabled: isDev
   },
+  colorMode: {
+  preference: 'dark',
+  fallback: 'dark',
+  classSuffix: ''
+},
 
   modules: [
     '@nuxt/fonts',
     '@nuxt/ui',
-    '@vueuse/nuxt',
     '@nuxt/icon',
+    '@nuxt/image',
+    '@nuxt/scripts',
+    '@pinia/nuxt',
+    '@vueuse/nuxt',
     'nuxt-security',
     '@nuxtjs/seo',
-    '@nuxt/eslint'
+    ...(isDev ? ['@nuxt/eslint'] : [])
   ],
 
   css: ['~/assets/css/main.css'],
@@ -45,6 +37,25 @@ export default defineNuxtConfig({
   ui: {
     theme: {
       colors: ['primary', 'secondary', 'tertiary', 'success', 'info', 'warning', 'error', 'neutral']
+    }
+  },
+
+  security: {
+    headers: {
+      contentSecurityPolicy: isDev
+        ? false
+        : {
+            'default-src': ["'self'"],
+            'base-uri': ["'self'"],
+            'font-src': ["'self'", 'https:', 'data:'],
+            'img-src': ["'self'", 'data:', 'blob:', 'https:'],
+            'object-src': ["'none'"],
+            'script-src': ["'self'", "'unsafe-inline'"],
+            'script-src-attr': ["'unsafe-inline'"],
+            'style-src': ["'self'", "'unsafe-inline'", 'https:'],
+            'connect-src': ["'self'", 'https:', 'ws:', 'wss:'],
+            'frame-ancestors': ["'self'"]
+          }
     }
   },
 

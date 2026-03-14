@@ -1,4 +1,4 @@
-import { defineNuxtPlugin } from '#app'
+import type { DirectiveBinding, ObjectDirective } from 'vue'
 
 type RevealOptions = {
   once?: boolean
@@ -8,6 +8,10 @@ type RevealOptions = {
   origin?: 'bottom' | 'top' | 'left' | 'right'
   threshold?: number
   rootMargin?: string
+}
+
+type RevealElement = HTMLElement & {
+  __revealObserver?: IntersectionObserver
 }
 
 const DEFAULTS: Required<RevealOptions> = {
@@ -38,65 +42,56 @@ function getOptions(bindingValue: unknown): Required<RevealOptions> {
   return DEFAULTS
 }
 
-export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.directive('reveal', {
-    mounted(el, binding) {
-      const opts = getOptions(binding.value)
+const revealDirective: ObjectDirective<RevealElement, RevealOptions> = {
+  mounted(el: RevealElement, binding: DirectiveBinding<RevealOptions>) {
+    const opts = getOptions(binding.value)
 
-      el.classList.add('reveal')
-      el.classList.add(`reveal--${opts.origin}`)
+    el.classList.add('reveal')
+    el.classList.add(`reveal--${opts.origin}`)
 
-      el.style.setProperty('--reveal-delay', `${opts.delay}ms`)
-      el.style.setProperty('--reveal-duration', `${opts.duration}ms`)
-      el.style.setProperty('--reveal-distance', `${opts.distance}px`)
+    el.style.setProperty('--reveal-delay', `${opts.delay}ms`)
+    el.style.setProperty('--reveal-duration', `${opts.duration}ms`)
+    el.style.setProperty('--reveal-distance', `${opts.distance}px`)
 
-      if (!('IntersectionObserver' in window)) {
-        el.classList.add('reveal--visible')
-        return
-      }
-
-      const existingObserver = (el as HTMLElement & {
-        __revealObserver?: IntersectionObserver
-      }).__revealObserver
-
-      if (existingObserver) {
-        existingObserver.disconnect()
-      }
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (!entry.isIntersecting) continue
-
-            el.classList.add('reveal--visible')
-
-            if (opts.once) {
-              observer.unobserve(el)
-            }
-          }
-        },
-        {
-          threshold: opts.threshold,
-          rootMargin: opts.rootMargin
-        }
-      )
-
-      ;(el as HTMLElement & { __revealObserver?: IntersectionObserver }).__revealObserver = observer
-      observer.observe(el)
-    },
-
-    unmounted(el) {
-      const observer = (el as HTMLElement & {
-        __revealObserver?: IntersectionObserver
-      }).__revealObserver
-
-      if (observer) {
-        observer.disconnect()
-      }
-
-      delete (el as HTMLElement & {
-        __revealObserver?: IntersectionObserver
-      }).__revealObserver
+    if (!('IntersectionObserver' in window)) {
+      el.classList.add('reveal--visible')
+      return
     }
-  })
+
+    if (el.__revealObserver) {
+      el.__revealObserver.disconnect()
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue
+
+          el.classList.add('reveal--visible')
+
+          if (opts.once) {
+            observer.unobserve(el)
+          }
+        }
+      },
+      {
+        threshold: opts.threshold,
+        rootMargin: opts.rootMargin
+      }
+    )
+
+    el.__revealObserver = observer
+    observer.observe(el)
+  },
+
+  unmounted(el: RevealElement) {
+    if (el.__revealObserver) {
+      el.__revealObserver.disconnect()
+      delete el.__revealObserver
+    }
+  }
+}
+
+export default defineNuxtPlugin((nuxtApp) => {
+  nuxtApp.vueApp.directive('reveal', revealDirective)
 })

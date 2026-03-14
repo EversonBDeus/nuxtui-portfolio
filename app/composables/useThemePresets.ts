@@ -219,19 +219,17 @@ export const THEME_PRESETS: ThemePreset[] = [
   }
 ]
 
-const FALLBACK_PRESET = THEME_PRESETS[0] as ThemePreset
+const FALLBACK_PRESET = THEME_PRESETS[0]!
 
 export function useThemePresets() {
-  const themeCookie = useCookie<ThemePresetId>('theme', {
-    default: () => 'cyber-lime'
-  })
+  const cookie = useCookie<ThemePresetId>('theme', { default: () => 'ux-elite' })
 
   const preset = computed<ThemePreset>(() => {
-    return THEME_PRESETS.find((item) => item.id === themeCookie.value) ?? FALLBACK_PRESET
+    return THEME_PRESETS.find((t) => t.id === cookie.value) ?? FALLBACK_PRESET
   })
 
   function setPreset(id: ThemePresetId) {
-    themeCookie.value = id
+    cookie.value = id
   }
 
   return {

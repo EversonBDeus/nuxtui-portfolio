@@ -1,8 +1,7 @@
 import { watch } from 'vue'
 
 export default defineNuxtPlugin(() => {
-  // mesmo cookie que você já usa no useThemePresets
-  const theme = useCookie<string>('theme', { default: () => 'cyber-lime' })
+  const theme = useCookie<string>('theme', { default: () => 'ux-elite' })
 
   const apply = (v: string) => {
     document.documentElement.dataset.preset = v

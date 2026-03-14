@@ -1,0 +1,6 @@
+Coloque aqui o seu currículo com este nome:
+
+cv.pdf
+
+Caminho final:
+public/files/cv.pdf
