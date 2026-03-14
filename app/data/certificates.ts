@@ -72,5 +72,33 @@ export const certificates: Certificate[] = [
     issuedDate: '2021-07-02',
     workload: '6 horas',
     description: 'Curso focado em Bootstrap 5 para construção rápida de interfaces responsivas.'
+  },
+  {
+    id: 'cebrac-geracao-web',
+    title: 'Geração Web',
+    provider: 'CEBRAC',
+    image: 'img/certificate/cebrac-gew.jpeg',
+    issuedDate: '2018-03-03',
+    workload: '200 horas',
+    description: 'Curso de formação em Geração Web com aprovação concluída no CEBRAC.'
+  },
+  {
+    id: 'cebrac-hardware',
+    title: 'Hardware',
+    provider: 'CEBRAC',
+    image: 'img/certificate/cebrac-hardware.jpeg',
+    issuedDate: '2018-02-07',
+    workload: '64 horas',
+    description: 'Curso de Hardware com foco em fundamentos técnicos e aprovação concluída no CEBRAC.'
+  },
+  {
+    id: 'estacio-ads-diploma',
+    title: 'Tecnólogo em Análise e Desenvolvimento de Sistemas',
+    provider: 'Universidade Estácio de Sá',
+    issuer: 'Faculdade Estácio de Sá de Campo Grande',
+    image: 'img/certificate/diplama-digital-estacio.png',
+    credentialUrl: '/img/certificate/DiplomaDigital.pdf',
+    issuedDate: '2022-05-27',
+    description: 'Diploma digital do curso superior de tecnologia em Análise e Desenvolvimento de Sistemas.'
   }
 ]
